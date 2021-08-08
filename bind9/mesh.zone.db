@@ -1,0 +1,28 @@
+;
+; This defines top level mesh name and all the nameserver for
+; the subdomains. Each mesh will have one subdomain and may have multiple name servers.
+; It should be possble to host this file on multiple supernodes without change.
+;
+$TTL 60
+$ORIGIN mesh.
+@ IN  SOA ns.mesh. master.mesh. (
+          1000000001  ; Serial
+       	  3600        ; Refresh
+			    300         ; Retry
+			    604800      ; Expire
+			    60 )        ; TTL
+
+          IN  NS      ns0
+ns0       IN  A       127.0.0.1
+
+;
+; Delegate subdomains to relevant name servers
+;
+
+; San Francisco Wireless Emergengy Mesh
+ns0.sfwem IN  A       10.50.254.167
+sfwem     IN  NS      ns0.sfwem
+
+; Santa Barbara Amateur Radio Club (example only)
+ns0.sbarc IN  A       10.0.0.1
+sbarc     IN  NS      ns0.sbarc
