@@ -1,7 +1,9 @@
 ;
-; This defines top level mesh name and all the nameserver for
-; the subdomains. Each mesh will have one subdomain and may have multiple name servers.
-; It should be possble to host this file on multiple supernodes without change.
+; This defines the top level .mesh and all the nameservers for
+; the subdomains.
+; Each mesh will have one subdomain and one or more name servers.
+; It should be possible to host this file on multiple name servers
+; without change.
 ;
 $TTL 60
 $ORIGIN mesh.
@@ -12,17 +14,16 @@ $ORIGIN mesh.
 			    604800      ; Expire
 			    60 )        ; TTL
 
-          IN  NS      ns0
-ns0       IN  A       127.0.0.1
-
 ;
 ; Delegate subdomains to relevant name servers
 ;
 
 ; San Francisco Wireless Emergengy Mesh
+          IN  NS      ns0.sfwem
 ns0.sfwem IN  A       10.50.254.167
 sfwem     IN  NS      ns0.sfwem
 
 ; Santa Barbara Amateur Radio Club (example only)
+          IN  NS      ns0.sbarc
 ns0.sbarc IN  A       10.0.0.1
 sbarc     IN  NS      ns0.sbarc
