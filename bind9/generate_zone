@@ -2,6 +2,7 @@
 
 OLSRDCONFIG=/etc/olsrd/olsrd.conf
 HOSTS=/var/run/hosts_olsr
+SECONDARIES=
 
 . ./config
 
@@ -25,23 +26,35 @@ cat > ${ZONEFILE} <<__EOF__
 ; Zone ${ZONE}.mesh
 ;
 \$TTL 60
-@	IN	SOA	ns.${ZONE}.mesh. master.${ZONE}.mesh. (
-			$(date +%s)
-			60
-			60
-			60
-			60 )
+\$ORIGIN ${ZONE}.mesh.
+@	IN	SOA	dns0.${ZONE}.mesh. root.${ZONE}.mesh. (
+			$(date +%s) ; Serial
+			3600 ; Refresh
+			300 ; Retry
+			604800 ; Expire
+			60 ) ; TTL
 ;
-	NS	ns
-;
-ns	A	${MYIP}
+@ IN  NS	dns0
+dns IN  A ${MYIP}
 __EOF__
 
+#
+# Add secondary DNS servers which will be notified when we update
+#
+if [ "${SECONDARIES}" != "" ]; then
+  count=0
+  for ip in ${SECONDARIES}
+  do
+    count=$(($count + 1))
+    echo "@ IN  NS  dns${count}" >> ${ZONEFILE}
+    echo "dns${count}  IN  A ${ip}" >> ${ZONEFILE}
+  done
+fi
 
 #
 # Create an entry for each valid IP/HOST line
 #
-while read LINE
+cat ${HOSTS} | while read LINE
 do
   words=( $LINE )
   ip=${words[0]}
@@ -49,9 +62,9 @@ do
   if [[ ${ip} =~ ^10\. && ! ${host} =~ \. ]]; then
     echo "$host	IN 	A	$ip" >> ${ZONEFILE}
   fi
-done < ${HOSTS}
+done
 
 #
 # Reload the zone
 #
-rndc reload ${ZONE}.mesh
+/usr/sbin/rndc reload ${ZONE}.mesh
