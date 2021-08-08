@@ -1,0 +1,57 @@
+#! /bin/bash
+
+OLSRDCONFIG=/etc/olsrd/olsrd.conf
+HOSTS=/var/run/hosts_olsr
+
+. ./config
+
+#
+# Get main IP
+#
+mainip=( $(cat ${OLSRDCONFIG} | grep "MainIp") )
+MYIP=${mainip[1]}
+if [ "${MYIP}" = "" ]; then
+  echo "Missing IP"
+  exit 1
+fi
+
+ZONEFILE="/etc/bind/${ZONE}.zone.db"
+
+#
+# Create zone file header
+#
+cat > ${ZONEFILE} <<__EOF__
+;
+; Zone ${ZONE}.mesh
+;
+\$TTL 60
+@	IN	SOA	ns.${ZONE}.mesh. master.${ZONE}.mesh. (
+			$(date +%s)
+			60
+			60
+			60
+			60 )
+;
+	NS	ns
+;
+ns	A	${MYIP}
+__EOF__
+
+
+#
+# Create an entry for each valid IP/HOST line
+#
+while read LINE
+do
+  words=( $LINE )
+  ip=${words[0]}
+  host=${words[1]}
+  if [[ ${ip} =~ ^10\. && ! ${host} =~ \. ]]; then
+    echo "$host	IN 	A	$ip" >> ${ZONEFILE}
+  fi
+done < ${HOSTS}
+
+#
+# Reload the zone
+#
+rndc reload ${ZONE}.mesh
