@@ -18,4 +18,4 @@ EXPOSE 698/udp 8081/tcp 53/udp 53/tcp
 
 COPY root/ /
 
-ENTRYPOINT /bin/bash /startup.sh
+ENTRYPOINT ["/startup.sh"]
