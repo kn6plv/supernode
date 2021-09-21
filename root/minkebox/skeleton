@@ -1,0 +1,229 @@
+x={
+  name: `AREDN Supernode`,
+  description: `Supernode to connect multiple AREDN mesh networks`,
+  image: `registry.minkebox.net/minkebox/supernode`,
+  uuid: `ABF4BCB2-A783-48F2-AE40-C6C62F4FC38B`,
+  tags: [ 'AREDN', 'Networking' ],
+  actions: [
+    {
+      type: `Header`,
+      title: `Configuration`
+    },
+    {
+      type: `EditEnvironment`,
+      name: `NODE_NAME`,
+      description: `Name of this node`
+    },
+    {
+      type: `EditEnvironment`,
+      name: `PRIMARY_IP`,
+      description: `Primary IP address`
+    },
+    {
+      type: `Header`,
+      title: `Zones`
+    },
+    {
+      type: `EditEnvironment`,
+      name: `DNS_ZONE`,
+      description: `My zone name`
+    },
+    {
+      type: `EditEnvironmentAsTable`,
+      name: `DNS_SUPERNODES`,
+      description: `Name and address of other zones we connect to`,
+      headers: [
+        {
+          name: `Zone name`
+        },
+        {
+          name: `IP Address`
+        }
+      ],
+      pattern: `{{V[0]}}:{{V[1]}}`,
+      join: ` `
+    },
+    {
+      type: `Header`,
+      title: `Tunnels`
+    },
+    {
+      type: `Text`,
+      text: `Create tunnels to other servers, or for clients to connect to (leave the target blank for these).
+             Tunnel configuration follows the AREDN format for name, network, etc.`
+    },
+    {
+      type: `EditEnvironmentAsTable`,
+      name: `TUN`,
+      description: ``,
+      controls: false,
+      headers: [
+        {
+          name: `Name`
+        },
+        {
+          name: `Password`
+        },
+        {
+          name: `/30 Network`
+        },
+        {
+          name: `Target`
+        }
+      ],
+      pattern: `{{V[0]}}:{{V[1]}}:{{V[2]}}:{{V[3]}`
+    },
+    {
+      type: `EditEnvironmentAsTable`,
+      name: `TUN0`,
+      description: `tun0`,
+      controls: false,
+      initValue: `[["","","",""]]`,
+      pattern: `{{V[0]}}:{{V[1]}}:{{V[2]}}:{{V[3]}`
+    },
+    {
+      type: `EditEnvironmentAsTable`,
+      name: `TUN1`,
+      description: `tun1`,
+      controls: false,
+      initValue: `[["","","",""]]`,
+      pattern: `{{V[0]}}:{{V[1]}}:{{V[2]}}:{{V[3]}`
+    },
+    {
+      type: `EditEnvironmentAsTable`,
+      name: `TUN2`,
+      description: `tun2`,
+      controls: false,
+      initValue: `[["","","",""]]`,
+      pattern: `{{V[0]}}:{{V[1]}}:{{V[2]}}:{{V[3]}`
+    },
+    {
+      type: `EditEnvironmentAsTable`,
+      name: `TUN3`,
+      description: `tun3`,
+      controls: false,
+      initValue: `[["","","",""]]`,
+      pattern: `{{V[0]}}:{{V[1]}}:{{V[2]}}:{{V[3]}`
+    },
+    {
+      type: `Header`,
+      title: `Networks`
+    },
+    {
+      type: `EditEnvironmentAsCheckbox`,
+      name: `DTD`,
+      description: `Enable DtD (VLAN2) on eth0`
+    },
+    {
+      type: `Text`
+    },
+    {
+      type: `EditEnvironmentAsTable`,
+      name: `ISOLATED_NETS`,
+      description: `Network devices which connect to our mesh`,
+      headers: [
+        {
+          name: `Device name`
+        }
+      ],
+      pattern: `{{V[0]}}`,
+      join: ` `
+    },
+    {
+      type: `EditEnvironmentAsTable`,
+      name: `SUPERNODE_NETS`,
+      description: `Network devices which connect to other supernodes`,
+      headers: [
+        {
+          name: `Device name`
+        }
+      ],
+      pattern: `{{V[0]}}`,
+      join: ` `
+    },
+  ],
+  properties: [
+    {
+      type: `Feature`,
+      name: `privileged`
+    },
+    {
+      type: `Environment`,
+      name: `TUN0`
+    },
+    {
+      type: `Environment`,
+      name: `TUN1`
+    },
+    {
+      type: `Environment`,
+      name: `TUN2`
+    },
+    {
+      type: `Environment`,
+      name: `TUN3`
+    },
+
+    {
+      type: `Environment`,
+      name: `NODE_NAME`
+    },
+    {
+      type: `Environment`,
+      name: `PRIMARY_IP`
+    },
+    {
+      type: `Environment`,
+      name: `DNS_ZONE`
+    },
+    {
+      type: `Environment`,
+      name: `DNS_SUPERNODES`
+    },
+    {
+      type: `Environment`,
+      name: `ISOLATED_NETS`
+    },
+    {
+      type: `Environment`,
+      name: `SUPERNODE_NETS`
+    },
+    {
+      type: `Port`,
+      name: `698/udp`,
+      port: 698,
+      protocol: `UDP`
+    },
+    {
+      type: `Port`,
+      name: `53/udp`,
+      port: 53,
+      protocol: `UDP`,
+      dns: true
+    },
+    {
+      type: `Port`,
+      name: `53/tcp`,
+      port: 53,
+      protocol: `TCP`
+    },
+    {
+      type: `Port`,
+      name: `8081/tcp`,
+      port: 8081,
+      protocol: `TCP`,
+      web: {
+        tab: `inline`,
+        widget: `inline`,
+        path: ``,
+        private: true
+      }
+    },
+    {
+      type: `Network`,
+      name: `primary`,
+      value: `home`,
+      vlan: `{{DTD ? 0 : 2}}`
+    }
+  ]
+}
