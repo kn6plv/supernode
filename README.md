@@ -1,10 +1,8 @@
-AREDN Supernode
-===
+# AREDN Supernode
 
 AREDN Supernodes provide a mechanism to connect multiple AREDN meshes together, allowing traffic to travel between them, without implicityly advertising all the nodes in every mesh to every other mesh. For a more complete description of why this is useful and how it works see https://docs.google.com/document/d/1Gqkv2wF6M7szCfbdVPbEG7IQzjDebQqdRx6mfLGMOqE/edit?usp=sharing
 
-Configuration
----
+## Configuration
 
 For easy of use, a supernode is contained in a Docker container which can be configured using a number of environmental variables:
 
@@ -17,7 +15,18 @@ For easy of use, a supernode is contained in a Docker container which can be con
 * *SUPERNODE_NETS* - List of network devices which are used to connect this supernode to other supernodes.
 * *TUN0, TUN1, ... TUN31* - Each TUNx can be used to configure a vtund client or server to connect this supernode to other supernodes or a mesh network. Each configuration takes four parameters, seperated by colons, and follow AREDN naming and network convensions. For example __KN6PLV-SFMON:apassword:172.32.90.240:tunnels.xojs.org__ defines a tunnel named __KN6PLV-SFMON__ with a password __apassword__. The tunnel uses __172.32.90.240__ as its network, and connects to the tunnel server __tunnels.xojs.org__. If the tunnel server parameter is omitted, this supernode will instead create a tunnel server for another client to connect to.
 
-Running the Docker
----
+## Building the Docker
+The Docker image is easily built:
 
-...
+```
+git clone https://github.com/kn6plv/supernode.git
+
+docker build -t kn6plv/supernode supernode
+```
+
+## Running the Docker
+Create a __env__ file which will contain the necessary environment variables (as detailed above). Then run the container as below:
+```
+docker run --env-file env --privileged kn6plv/supernode
+```
+Alternative, you can run it using your favorite Docker container manager.
