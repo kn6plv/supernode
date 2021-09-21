@@ -1,4 +1,4 @@
-# /bin/bash
+#! /bin/bash
 
 trap "killall sleep olsrd named vtund; exit" TERM INT
 
