@@ -16,17 +16,16 @@ default {
 __EOF__
 
 #
-# Loop through set of TUNx variables, creating a tunnel for each one.
+# Loop through set of TUN0 to TUN31 variables, creating a tunnel for each valid one.
 #
 run=":"
-tun=0
 server=0
-while true
+for tun in {0..31}
 do
   vtunr="TUN${tun}"
   vtun=${!vtunr}
   if [ "${vtun}" = "" ]; then
-    break
+    continue
   fi
 
   name=$(echo ${vtun} | cut -d: -f 1)
