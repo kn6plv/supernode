@@ -26,8 +26,8 @@ if [ "${NODE_NAME}" = "" ]; then
   echo "NODE_NAME is not defined. The name of this supernode in the mesh network"
   exit 1
 fi
-if [ "${ISOLATED_NETS}" = "" ]; then
-  echo "ISOLATED_NETS is not defined. These aere the network device which connect this supernode to a mesh."
+if [ "${MESH_NETS}" = "" ]; then
+  echo "MESH_NETS is not defined. These aere the network device which connect this supernode to a mesh."
   exit 1
 fi
 if [ "${SUPERNODE_NETS}" = "" ]; then

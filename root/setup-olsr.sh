@@ -40,7 +40,7 @@ __EOF__
 #
 # Add isolated network connections
 #
-for net in ${ISOLATED_NETS}
+for net in ${MESH_NETS}
 do
   cat >> ${OLSRD_CONFIG} << __EOF__
 
