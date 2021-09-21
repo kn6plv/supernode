@@ -1,4 +1,4 @@
-x={
+{
   name: `AREDN Supernode`,
   description: `Supernode to connect multiple AREDN mesh networks`,
   image: `registry.minkebox.net/minkebox/supernode`,
@@ -17,7 +17,8 @@ x={
     {
       type: `EditEnvironment`,
       name: `PRIMARY_IP`,
-      description: `Primary IP address`
+      description: `Primary IP address`,
+      initValue: `10.{{__RANDOMNUMBER(0,256)}}.{{__RANDOMNUMBER(0,256)}}.{{(__RANDOMNUMBER(4,252) & 252) + 1}}`
     },
     {
       type: `Header`,
@@ -110,9 +111,19 @@ x={
       title: `Networks`
     },
     {
+      type: `SelectNetwork`,
+      name: `primary`,
+      description: `Select eth0 network`
+    },
+    {
       type: `EditEnvironmentAsCheckbox`,
       name: `DTD`,
       description: `Enable DtD (VLAN2) on eth0`
+    },
+    {
+      type: `SelectNetwork`,
+      name: `secondary`,
+      description: `Select eth1 network`
     },
     {
       type: `Text`
@@ -148,6 +159,11 @@ x={
       name: `privileged`
     },
     {
+      type: `Feature`,
+      name: `staticip`,
+      value: `{{PRIMARY_IP}}/8`
+    },
+    {
       type: `Environment`,
       name: `TUN0`
     },
@@ -163,7 +179,6 @@ x={
       type: `Environment`,
       name: `TUN3`
     },
-
     {
       type: `Environment`,
       name: `NODE_NAME`
@@ -224,6 +239,12 @@ x={
       name: `primary`,
       value: `home`,
       vlan: `{{DTD ? 0 : 2}}`
+    },
+    {
+      type: `Network`,
+      name: `secondary`,
+      value: `none`,
+      create: true
     }
   ]
 }
