@@ -65,4 +65,4 @@ dns0        IN A  ${PRIMARY_IP}
 ${NODE_NAME} IN A  ${PRIMARY_IP}
 __EOF__
 
-# named
+named

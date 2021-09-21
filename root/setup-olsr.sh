@@ -67,4 +67,4 @@ Interface "${net}"
 __EOF__
 done
 
-#olsrd
+olsrd
