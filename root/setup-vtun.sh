@@ -72,4 +72,8 @@ __EOF__
 done
 
 # Start any vtun daemons
-bash -c "${run}"
+if [ "${run}" = ":" ]; then
+  echo "No tunnels defined"
+else
+  bash -c "${run}"
+fi

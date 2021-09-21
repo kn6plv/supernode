@@ -1,5 +1,10 @@
 # Setup NAMED
 
+if [ "${DNS_ZONE}" = "" ]; then
+  echo "No DNS_ZONE defined - named not started"
+  return
+fi
+
 cat > /etc/bind/named.conf.local << __EOF__
 zone "mesh" {
   type master;

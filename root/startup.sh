@@ -15,23 +15,18 @@ fi
 
 # Simple sanity checks.
 if [ "${PRIMARY_IP}" = "" ]; then
-  echo "PRIMARY_IP is not defined. The primary IPv4 address of this node."
+  echo "PRIMARY_IP is not defined; the primary IPv4 address of this node."
   exit 1
 fi
 if [ "${DNS_ZONE}" = "" ]; then
-  echo "DNS_ZONE is not defined. The dns zone name for the connected mesh."
-  exit 1
+  echo "DNS_ZONE is not defined; DNS will not start."
 fi
 if [ "${NODE_NAME}" = "" ]; then
-  echo "NODE_NAME is not defined. The name of this supernode in the mesh network"
+  echo "NODE_NAME is not defined; the name of this node in the mesh network."
   exit 1
 fi
-if [ "${MESH_NETS}" = "" ]; then
-  echo "MESH_NETS is not defined. These aere the network device which connect this supernode to a mesh."
-  exit 1
-fi
-if [ "${SUPERNODE_NETS}" = "" ]; then
-  echo "SUPERNODE_NETS is not defined. These are the network devices which connect this supernode to others."
+if [ "${MESH_NETS}" = "" -a "${SUPERNODE_NETS}" = "" ]; then
+  echo "Neither MESH_NETS or SUPERNODE_NETS are defined. We cannot connect to a network."
   exit 1
 fi
 
