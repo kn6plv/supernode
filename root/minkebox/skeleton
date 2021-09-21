@@ -1,7 +1,7 @@
 {
   name: `AREDN Supernode`,
   description: `Supernode to connect multiple AREDN mesh networks`,
-  image: `registry.minkebox.net/minkebox/supernode`,
+  image: `gitlab.home:5005/kn6plv/supernode`,
   uuid: `ABF4BCB2-A783-48F2-AE40-C6C62F4FC38B`,
   tags: [ 'AREDN', 'Networking' ],
   actions: [
