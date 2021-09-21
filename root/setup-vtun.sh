@@ -33,6 +33,11 @@ do
   net=$(echo ${vtun} | cut -d: -f 3)
   target=$(echo ${vtun} | cut -d: -f 4)
 
+  # Ignore incomplete entries
+  if [ "${name}" = "" -o "${password}" = "" -o "${net}" = "" ]; then
+    continue
+  fi
+
   # Generate local and remote IPs from network address
   s=($(echo ${net} | tr "." "\n"))
   localip="${s[0]}.${s[1]}.${s[2]}.$((1 + ${s[3]}))"
