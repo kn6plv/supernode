@@ -7,4 +7,4 @@ __EOF__
 
 # Create a dummy interface we can put our PRIMARY_IP on
 ip link add link eth0 name primary type vlan id 3072
-ifconfig primary ${PRIMARY_IP} 255.0.0.0 10.255.255.255
+ifconfig primary ${PRIMARY_IP} netmask 255.0.0.0 broadcast 10.255.255.255
