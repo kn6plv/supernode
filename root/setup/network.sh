@@ -9,4 +9,5 @@ if [ "${__DEFAULT_INTERFACE_IP}" != "${PRIMARY_IP}" -a "${__SECONDARY_INTERFACE_
   # Create a dummy interface we can put our PRIMARY_IP on
   ip link add link eth0 name primary type vlan id 3072
   ip addr add ${PRIMARY_IP}/8 broadcast + dev primary
+  ip link set primary up
 fi
