@@ -2,7 +2,7 @@
 
 . /config
 
-ZONEFILE="/etc/bind/${DNS_ZONE}.zone.db"
+ZONEFILE="/tmp/bind/master/${DNS_ZONE}.zone.db"
 
 #
 # Create zone file header

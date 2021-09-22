@@ -5,18 +5,51 @@ if [ "${DNS_ZONE}" = "" ]; then
   return
 fi
 
-cat > /etc/bind/named.conf.local << __EOF__
+mkdir -p /tmp/bind/master /tmp/bind/slave
+
+CONF=/etc/bind/named.conf.local
+
+# Setup permissions
+echo 'acl "supernodes" {' > ${CONF}
+for node in ${DNS_SUPERNODES}
+do
+  ips=$(echo $node | cut -d: -f 2- | tr ":" ";")
+  echo "  ${ips};" >> ${CONF}
+done
+echo '}' >> ${CONF}
+
+# Add master zones
+cat >> ${CONF} << __EOF__
 zone "mesh" {
   type master;
-  file "/etc/bind/mesh.zone.db";
+  file "/tmp/bind/master/mesh.zone.db";
 };
 zone "${DNS_ZONE}.mesh" {
   type master;
-  file "/etc/bind/${DNS_ZONE}.zone.db";
+  also-notify { supernodes; };
+  allow-transfer { supernodes; };
+  file "/tmp/bind/master/${DNS_ZONE}.zone.db";
 };
 __EOF__
 
-cat > /etc/bind/mesh.zone.db << __EOF__
+# Add slaves
+for node in ${DNS_SUPERNODES}
+do
+  zone=$(echo $node | cut -d: -f 1)
+  ips=$(echo $node | cut -d: -f 2- | tr ":" ";")
+  cat >> ${CONF} << __EOF__
+zone "${zone}.mesh" {
+  type slave;
+  masters { ${ips}; };
+  allow-notify { ${ips}; };
+  masterfile-format text;
+  file "/tmp/bind/slave/${zone}.zone.db";
+}
+__EOF__
+done
+
+# Create master zones
+cat > /tmp/bind/master/mesh.zone.db << __EOF__
 ;
 ; This defines the top level .mesh and all the nameservers for the subdomains.
 ; Each mesh will have one subdomain and one or more name servers.
@@ -55,7 +88,7 @@ __EOF__
   done
 done
 
-cat > /etc/bind/${DNS_ZONE}.zone.db << __EOF__
+cat > /tmp/bind/master/${DNS_ZONE}.zone.db << __EOF__
 \$TTL 60
 \$ORIGIN ${DNS_ZONE}.mesh.
 @   IN SOA  dns0.${DNS_ZONE}.mesh. root.${DNS_ZONE}.mesh. (
