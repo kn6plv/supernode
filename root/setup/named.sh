@@ -17,7 +17,7 @@ do
   echo "  ${ips};" >> ${CONF}
 done
 echo '};' >> ${CONF}
-echo 'masters "othernodes" {' > ${CONF}
+echo 'masters "othernodes" {' >> ${CONF}
 for node in ${DNS_SUPERNODES}
 do
   ips=$(echo $node | cut -d: -f 2- | tr ":" ";")
