@@ -213,8 +213,7 @@
       type: `Port`,
       name: `53/udp`,
       port: 53,
-      protocol: `UDP`,
-      dns: true
+      protocol: `UDP`
     },
     {
       type: `Port`,
@@ -238,7 +237,7 @@
       type: `Network`,
       name: `primary`,
       value: `home`,
-      vlan: `{{DTD ? 0 : 2}}`
+      vlan: `{{DTD ? 2 : 0}}`
     },
     {
       type: `Network`,
