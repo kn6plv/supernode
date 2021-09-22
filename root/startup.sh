@@ -30,11 +30,7 @@ if [ "${MESH_NETS}" = "" -a "${SUPERNODE_NETS}" = "" ]; then
   exit 1
 fi
 
-# Override the nameserver (just in case)
-cat > /etc/resolv.conf << __EOF__
-nameserver 1.1.1.1
-__EOF__
-
+. /setup-network.sh
 . /setup-vtun.sh
 . /setup-olsr.sh
 . /setup-named.sh

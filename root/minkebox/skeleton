@@ -165,11 +165,6 @@
       name: `privileged`
     },
     {
-      type: `Feature`,
-      name: `staticip`,
-      value: `{{PRIMARY_IP}}/8`
-    },
-    {
       type: `Environment`,
       name: `TUN0`
     },
