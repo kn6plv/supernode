@@ -1,10 +1,9 @@
 #! /bin/bash
 
-(inotifywait --quiet --monitor /tmp/bind/zones --event close_write | while read event do
+. /config
+
+update_local() {
   cat > /tmp/bind/local.zone.db << __EOF__
-;
-; This defines the top level local.mesh.
-;
 \$TTL 60
 \$ORIGIN local.mesh.
 @  SOA ns.local.mesh. master.local.mesh. (
@@ -13,9 +12,7 @@
   300         ; Retry
   604800      ; Expire
   60 )        ; TTL
-;
-; Delegate subdomains to relevant name servers
-;
+
       NS  ns0
 ns0   A   ${PRIMARY_IP}
 local NS  ns0
@@ -28,4 +25,9 @@ __EOF__
   # Reload the zone
   #
   rndc reload local.mesh
+}
+
+(inotifywait --quiet --monitor /tmp/bind/zones --event close_write | while read event
+do
+  update_local
 done) &

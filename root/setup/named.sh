@@ -31,7 +31,7 @@ zone "mesh" {
   type master;
   file "/etc/bind/mesh.zone.db";
 };
-zone "mesh" {
+zone "local.mesh" {
   type master;
   file "/tmp/bind/local.zone.db";
 };
@@ -60,7 +60,7 @@ __EOF__
 done
 
 # Create local zone
-cat > /etc/bind/local.zone.db << __EOF__
+cat > /tmp/bind/local.zone.db << __EOF__
 ;
 ; This defines the top level local.mesh.
 ;

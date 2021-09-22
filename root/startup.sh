@@ -8,7 +8,7 @@ if [ -f /config ]; then
  . /config
 else
   cat > /config << __EOF__
-PRIMARY_IP="${PRIMARY_IP}
+PRIMARY_IP="${PRIMARY_IP}"
 DNS_ZONE="${DNS_ZONE}"
 __EOF__
 fi
@@ -34,6 +34,7 @@ fi
 . /setup/vtun.sh
 . /setup/olsr.sh
 . /setup/named.sh
+. /named/generate_local.sh
 
 sleep 2147483647d &
 wait "$!"
