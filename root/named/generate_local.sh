@@ -1,7 +1,5 @@
 #! /bin/bash
 
-. /config
-
 update_local() {
   cat > /tmp/bind/local.zone.db << __EOF__
 \$TTL 60

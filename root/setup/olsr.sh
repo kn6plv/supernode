@@ -20,7 +20,7 @@ Willingness 7
 
 Hna4
 {
-  $([[ "${MESH_NETS}" != "" && "${DISABLE_SUPERNODE}" == "false" ]] && echo "10.0.0.0 255.0.0.0")
+  $([[ "${MESH_NETS}" != "" && "${DISABLE_SUPERNODE}" != "true" ]] && echo "10.0.0.0 255.0.0.0")
 }
 
 LoadPlugin "olsrd_httpinfo.so.0.1"
