@@ -10,13 +10,20 @@ mkdir -p /tmp/bind/master /tmp/bind/slave
 CONF=/etc/bind/named.conf.local
 
 # Setup permissions
-echo 'acl "supernodes" {' > ${CONF}
+echo 'acl "othernodes" {' > ${CONF}
 for node in ${DNS_SUPERNODES}
 do
   ips=$(echo $node | cut -d: -f 2- | tr ":" ";")
   echo "  ${ips};" >> ${CONF}
 done
-echo '}' >> ${CONF}
+echo '};' >> ${CONF}
+echo 'masters "othernodes" {' > ${CONF}
+for node in ${DNS_SUPERNODES}
+do
+  ips=$(echo $node | cut -d: -f 2- | tr ":" ";")
+  echo "  ${ips};" >> ${CONF}
+done
+echo '};' >> ${CONF}
 
 # Add master zones
 cat >> ${CONF} << __EOF__
@@ -26,8 +33,8 @@ zone "mesh" {
 };
 zone "${DNS_ZONE}.mesh" {
   type master;
-  also-notify { supernodes; };
-  allow-transfer { supernodes; };
+  also-notify { othernodes; };
+  allow-transfer { othernodes; };
   file "/tmp/bind/master/${DNS_ZONE}.zone.db";
 };
 __EOF__
@@ -44,7 +51,7 @@ zone "${zone}.mesh" {
   allow-notify { ${ips}; };
   masterfile-format text;
   file "/tmp/bind/slave/${zone}.zone.db";
-}
+};
 __EOF__
 done
 
