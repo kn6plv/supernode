@@ -242,7 +242,7 @@
       name: `primary`,
       value: `home`,
       vlan: `{{DTD ? 2 : 0}}`,
-      staticip: `{{DTD ? PRIMARY_IP : ''}}`
+      staticip: `{{DTD ? PRIMARY_IP + '/8' : ''}}`
     },
     {
       type: `Network`,
