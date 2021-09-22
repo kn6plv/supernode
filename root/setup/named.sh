@@ -70,4 +70,7 @@ dns0        IN A  ${PRIMARY_IP}
 ${NODE_NAME} IN A  ${PRIMARY_IP}
 __EOF__
 
+# Fix rndc.key
+chmod 644 /etc/bind/rndc.key
+
 named

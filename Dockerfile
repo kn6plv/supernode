@@ -17,6 +17,6 @@ RUN apt autoremove -y git build-essential bison flex libgps-dev
 EXPOSE 698/udp 8081/tcp 53/udp 53/tcp
 
 COPY root/ /
-RUN chmod 777 /startup.sh /setup/*.sh
+RUN chmod 777 /startup.sh /setup/*.sh /named/*.sh
 
 ENTRYPOINT ["/startup.sh"]
