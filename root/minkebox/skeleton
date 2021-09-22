@@ -21,6 +21,12 @@
       initValue: `10.{{__RANDOMNUMBER(0,256)}}.{{__RANDOMNUMBER(0,256)}}.{{(__RANDOMNUMBER(4,252) & 252) + 1}}`
     },
     {
+      type: `EditEnvironmentAsCheckbox`,
+      name: `DISABLE_SUPERNODE`,
+      description: `Disable the supernode /8 route`,
+      initValue: `true`
+    },
+    {
       type: `Header`,
       title: `Zones`
     },
@@ -202,6 +208,10 @@
     {
       type: `Environment`,
       name: `SUPERNODE_NETS`
+    },
+    {
+      type: `Environment`,
+      name: `DISABLE_SUPERNODE`
     },
     {
       type: `Port`,
