@@ -30,10 +30,10 @@ if [ "${MESH_NETS}" = "" -a "${SUPERNODE_NETS}" = "" ]; then
   exit 1
 fi
 
-. /setup-network.sh
-. /setup-vtun.sh
-. /setup-olsr.sh
-. /setup-named.sh
+. /setup/network.sh
+. /setup/vtun.sh
+. /setup/olsr.sh
+. /setup/named.sh
 
 sleep 2147483647d &
 wait "$!"
