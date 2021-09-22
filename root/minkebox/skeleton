@@ -227,8 +227,7 @@
       port: 8081,
       protocol: `TCP`,
       web: {
-        tab: `inline`,
-        widget: `inline`,
+        tab: `newtab`,
         path: ``,
         private: true
       }
