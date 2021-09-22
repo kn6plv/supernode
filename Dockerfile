@@ -1,7 +1,7 @@
 FROM debian:stable-20210902-slim
 
 RUN apt update ;\
-    apt install -y git build-essential bison flex libgps-dev vtun bind9 net-tools dnsutils procps
+    apt install -y git build-essential bison flex libgps-dev vtun bind9 inotify-tools net-tools dnsutils procps
 
 RUN mkdir build ;\
     cd build ;\

@@ -5,7 +5,7 @@ if [ "${DNS_ZONE}" = "" ]; then
   return
 fi
 
-mkdir -p /tmp/bind
+mkdir -p /tmp/bind/zones
 
 CONF=/etc/bind/named.conf.local
 
@@ -31,11 +31,15 @@ zone "mesh" {
   type master;
   file "/etc/bind/mesh.zone.db";
 };
+zone "mesh" {
+  type master;
+  file "/tmp/bind/local.zone.db";
+};
 zone "${DNS_ZONE}.mesh" {
   type master;
   also-notify { othernodes; };
   allow-transfer { othernodes; };
-  file "/tmp/bind/master-${DNS_ZONE}.zone.db";
+  file "/tmp/bind/zones/master-${DNS_ZONE}.zone.db";
 };
 __EOF__
 
@@ -50,10 +54,31 @@ zone "${zone}.mesh" {
   masters { ${ips}; };
   allow-notify { ${ips}; };
   masterfile-format text;
-  file "/tmp/bind/slave-${zone}.zone.db";
+  file "/tmp/bind/zones/slave-${zone}.zone.db";
 };
 __EOF__
 done
+
+# Create local zone
+cat > /etc/bind/local.zone.db << __EOF__
+;
+; This defines the top level local.mesh.
+;
+\$TTL 60
+\$ORIGIN local.mesh.
+@  SOA ns.local.mesh. master.local.mesh. (
+  $(date +%s) ; Serial
+  3600        ; Refresh
+  300         ; Retry
+  604800      ; Expire
+  60 )        ; TTL
+;
+; Delegate subdomains to relevant name servers
+;
+      NS  ns0
+ns0   A   ${PRIMARY_IP}
+local NS  ns0
+__EOF__
 
 # Create master zones
 cat > /etc/bind/mesh.zone.db << __EOF__
@@ -69,11 +94,9 @@ cat > /etc/bind/mesh.zone.db << __EOF__
   300         ; Retry
   604800      ; Expire
   60 )        ; TTL
-
 ;
 ; Delegate subdomains to relevant name servers
 ;
-
          NS ns0.${DNS_ZONE}
 ns0.${DNS_ZONE} A  ${PRIMARY_IP}
 ${DNS_ZONE}     NS ns0.${DNS_ZONE}
@@ -95,7 +118,7 @@ __EOF__
   done
 done
 
-cat > /tmp/bind/master-${DNS_ZONE}.zone.db << __EOF__
+cat > /tmp/bind/zones/master-${DNS_ZONE}.zone.db << __EOF__
 \$TTL 60
 \$ORIGIN ${DNS_ZONE}.mesh.
 @   SOA  dns0.${DNS_ZONE}.mesh. root.${DNS_ZONE}.mesh. (
