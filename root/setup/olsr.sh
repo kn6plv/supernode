@@ -20,8 +20,7 @@ Willingness 7
 
 Hna4
 {
-  $([[ "${MESH_NETS}" != "" && "${DISABLE_SUPERNODE}" != "true" ]] && echo "10.0.0.0 255.128.0.0")
-  $([[ "${MESH_NETS}" != "" && "${DISABLE_SUPERNODE}" != "true" ]] && echo "10.128.0.0 255.128.0.0")
+$([[ "${MESH_NETS}" != "" && "${DISABLE_SUPERNODE}" != "true" ]] && echo "  10.0.0.0 255.128.0.0\n  10.128.0.0 255.128.0.0")
 }
 
 LoadPlugin "olsrd_httpinfo.so.0.1"
@@ -49,6 +48,8 @@ Interface "${net}"
 {
   Mode "isolated"
   $([[ "${net}" == tun* ]] && echo "Ip4Broadcast 255.255.255.255")
+  HnaInterval 1.0
+  HnaValidityTime 600.0
 }
 __EOF__
 done
