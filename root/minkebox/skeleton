@@ -53,7 +53,7 @@
     {
       type: `EditEnvironment`,
       name: `LOCALNODE`,
-      descripiton: `Name of node to map to localnode.local.mesh`
+      description: `Name of node to map to localnode.local.mesh`
     },
     {
       type: `Header`,
