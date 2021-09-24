@@ -30,6 +30,10 @@ LoadPlugin "olsrd_httpinfo.so.0.1"
   PlParam "Net" "0.0.0.0 0.0.0.0"
 }
 
+LoadPlugin "olsrd_arprefresh.so.0.1"
+{
+}
+
 LoadPlugin "olsrd_nameservice.so.0.4"
 {
   PlParam "name" "${NODE_NAME}"
