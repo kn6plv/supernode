@@ -1,7 +1,9 @@
 #! /bin/bash
 
+CONF=/tmp/bind/local.zone.db
+
 update_local() {
-  cat > /tmp/bind/local.zone.db << __EOF__
+  cat > ${CONF} << __EOF__
 \$TTL 60
 \$ORIGIN local.mesh.
 @  SOA ns.local.mesh. master.local.mesh. (
@@ -17,8 +19,11 @@ local NS  ns0
 __EOF__
   for f in /tmp/bind/zones/master-*.zone.db /tmp/bind/zones/slave-*.zone.db
   do
-    cat ${f} | grep "10\." >> /tmp/bind/local.zone.db
+    cat ${f} | grep "10\." >> ${CONF}
   done
+  if [ "${LOCALNODE}" != "" ]; then
+    echo "localnode CNAME ${LOCALNODE}" >> ${CONF}
+  fi
   #
   # Reload the zone
   #

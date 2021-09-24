@@ -51,6 +51,11 @@
       join: ` `
     },
     {
+      type: `EditEnvironment`,
+      name: `LOCALNODE`,
+      descripiton: `Name of node to map to localnode.local.mesh`
+    },
+    {
       type: `Header`,
       title: `Tunnels`
     },
@@ -207,6 +212,10 @@
     {
       type: `Environment`,
       name: `DISABLE_SUPERNODE`
+    },
+    {
+      type: `Environment`,
+      name: `LOCALNODE`
     },
     {
       type: `Port`,

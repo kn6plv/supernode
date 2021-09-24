@@ -29,6 +29,9 @@ if [ "${MESH_NETS}" = "" -a "${SUPERNODE_NETS}" = "" ]; then
   echo "Neither MESH_NETS or SUPERNODE_NETS are defined. We cannot connect to a network."
   exit 1
 fi
+if [ "${LOCALNODE}" = "" ]; then
+  echo "LOCALNODE is not set so localnode.local.mesh will not resolve."
+fi
 
 . /setup/network.sh
 . /setup/vtun.sh
