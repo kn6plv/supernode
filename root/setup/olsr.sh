@@ -20,7 +20,38 @@ Willingness 7
 
 Hna4
 {
-$([[ "${MESH_NETS}" != "" && "${DISABLE_SUPERNODE}" != "true" ]] && (echo "  10.0.0.0 255.128.0.0"; echo "  10.128.0.0 255.128.0.0"))
+__EOF__
+
+if [[ "${MESH_NETS}" != "" && "${DISABLE_SUPERNODE}" != "true" ]]; then
+  echo "  10.0.0.0   255.128.0.0" >> ${OLSRD_CONFIG}
+  echo "  10.128.0.0 255.128.0.0" >> ${OLSRD_CONFIG}
+fi
+
+# Add tunnel IPs so we can be routed to
+for tun in {0..31}
+do
+  vtunr="TUN${tun}"
+  vtun=${!vtunr}
+  if [ "${vtun}" = "" ]; then
+    continue
+  fi
+
+  net=$(echo ${vtun} | cut -d: -f 3)
+  target=$(echo ${vtun} | cut -d: -f 4)
+
+  # Generate local and remote IPs from network address
+  s=($(echo ${net} | tr "." "\n"))
+  localip="${s[0]}.${s[1]}.${s[2]}.$((1 + ${s[3]}))"
+  remoteip="${s[0]}.${s[1]}.${s[2]}.$((2 + ${s[3]}))"
+
+  if [ "${target}" = "" ]; then
+    echo "  ${remoteip} 255.255.255.255" >> ${OLSRD_CONFIG}
+  else
+    echo "  ${localip} 255.255.255.255" >> ${OLSRD_CONFIG}
+  fi
+done
+
+cat >> ${OLSRD_CONFIG} << __EOF__
 }
 
 LoadPlugin "olsrd_httpinfo.so.0.1"
