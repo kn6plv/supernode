@@ -30,7 +30,17 @@ __EOF__
   rndc reload local.mesh
 }
 
-(inotifywait --quiet --monitor /tmp/bind/zones --event close_write | while read event
+mkdir -p /tmp/update_local
+( inotifywait --quiet --monitor /tmp/bind/zones --event close_write | while read event
 do
+  if [ ! -f /tmp/update_local/run ]
+  then
+    touch /tmp/update_local/run
+  fi
+done ) &
+( inotifywait --quiet --monitor /tmp/update_local --event close_write | while read event
+do
+  sleep 5
+  rm -f /tmp/update_local/run
   update_local
-done) &
+done ) &
