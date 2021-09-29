@@ -27,6 +27,12 @@
       initValue: `true`
     },
     {
+      type: `EditEnvironmentAsCheckbox`,
+      name: `ENABLE_MASQUARADE`,
+      description: `Enable IP masquarading for mesh connections`,
+      initValue: `false`
+    },
+    {
       type: `Header`,
       title: `Zones`
     },
@@ -212,6 +218,10 @@
     {
       type: `Environment`,
       name: `DISABLE_SUPERNODE`
+    },
+    {
+      type: `Environment`,
+      name: `ENABLE_MASQUARADE`
     },
     {
       type: `Environment`,
