@@ -28,28 +28,28 @@ if [[ "${MESH_NETS}" != "" && "${DISABLE_SUPERNODE}" != "true" ]]; then
 fi
 
 # Add tunnel IPs so we can be routed to
-for tun in {0..31}
-do
-  vtunr="TUN${tun}"
-  vtun=${!vtunr}
-  if [ "${vtun}" = "" ]; then
-    continue
-  fi
-
-  net=$(echo ${vtun} | cut -d: -f 3)
-  target=$(echo ${vtun} | cut -d: -f 4)
-
-  # Generate local and remote IPs from network address
-  s=($(echo ${net} | tr "." "\n"))
-  localip="${s[0]}.${s[1]}.${s[2]}.$((1 + ${s[3]}))"
-  remoteip="${s[0]}.${s[1]}.${s[2]}.$((2 + ${s[3]}))"
-
-  if [ "${target}" = "" ]; then
-    echo "  ${remoteip} 255.255.255.255" >> ${OLSRD_CONFIG}
-  else
-    echo "  ${localip} 255.255.255.255" >> ${OLSRD_CONFIG}
-  fi
-done
+#for tun in {0..31}
+#do
+#  vtunr="TUN${tun}"
+#  vtun=${!vtunr}
+#  if [ "${vtun}" = "" ]; then
+#    continue
+#  fi
+#
+#  net=$(echo ${vtun} | cut -d: -f 3)
+#  target=$(echo ${vtun} | cut -d: -f 4)
+#
+#  # Generate local and remote IPs from network address
+#  s=($(echo ${net} | tr "." "\n"))
+#  localip="${s[0]}.${s[1]}.${s[2]}.$((1 + ${s[3]}))"
+#  remoteip="${s[0]}.${s[1]}.${s[2]}.$((2 + ${s[3]}))"
+#
+#  if [ "${target}" = "" ]; then
+#    echo "  ${remoteip} 255.255.255.255" >> ${OLSRD_CONFIG}
+#  else
+#    echo "  ${localip} 255.255.255.255" >> ${OLSRD_CONFIG}
+#  fi
+#done
 
 cat >> ${OLSRD_CONFIG} << __EOF__
 }

@@ -18,6 +18,6 @@ fi
 if [ "${ENABLE_MASQUARADE}" = "true" ]; then
   for net in ${MESH_NETS}
   do
-    ${IPTABLES} -t nat -I POSTROUTING -o ${net} -j MASQUERADE
+    ${IPTABLES} -t nat -I POSTROUTING -o ${net} -j SNAT --to-source ${PRIMARY_IP}
   done
 fi
