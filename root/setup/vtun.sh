@@ -54,9 +54,9 @@ ${name}-${s[0]}-${s[1]}-${s[2]}-${s[3]} {
   device tun${tun};
   passwd ${password};
   up {
-    ifconfig "%% ${remoteip} netmask 255.255.255.252 pointtopoint ${localip} mtu 1450";
+    ifconfig "%% ${remoteip} netmask 255.255.255.252 pointopoint ${localip} mtu 1450";
     route "add -net ${net}/30 gw ${localip}";
-  }
+  };
 }
 __EOF__
   else
@@ -66,9 +66,9 @@ ${name}-${s[0]}-${s[1]}-${s[2]}-${s[3]} {
   device tun${tun};
   passwd ${password};
   up {
-    ifconfig "%% ${localip} netmask 255.255.255.252 pointtopoint ${remoteip} mtu 1450";
+    ifconfig "%% ${localip} netmask 255.255.255.252 pointopoint ${remoteip} mtu 1450";
     route "add -net ${net}/30 gw ${remoteip}";
-  }
+  };
 }
 __EOF__
     run="${run};vtund ${name}-${s[0]}-${s[1]}-${s[2]}-${s[3]} ${target}"
