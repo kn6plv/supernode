@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Setup NAMED
 
 if [ "${DNS_ZONE}" = "" ]; then
@@ -13,14 +15,14 @@ CONF=/etc/bind/named.conf.local
 echo 'acl "othernodes" {' > ${CONF}
 for node in ${DNS_SUPERNODES}
 do
-  ips=$(echo $node | cut -d: -f 2- | tr ":" ";")
+  ips=$(echo "${node}" | cut -d: -f 2- | tr ":" ";")
   echo "  ${ips};" >> ${CONF}
 done
 echo '};' >> ${CONF}
 echo 'masters "othernodes" {' >> ${CONF}
 for node in ${DNS_SUPERNODES}
 do
-  ips=$(echo $node | cut -d: -f 2- | tr ":" ";")
+  ips=$(echo "${node}" | cut -d: -f 2- | tr ":" ";")
   echo "  ${ips};" >> ${CONF}
 done
 echo '};' >> ${CONF}
@@ -46,8 +48,8 @@ __EOF__
 # Add slaves
 for node in ${DNS_SUPERNODES}
 do
-  zone=$(echo $node | cut -d: -f 1)
-  ips=$(echo $node | cut -d: -f 2- | tr ":" ";")
+  zone=$(echo "${node}" | cut -d: -f 1)
+  ips=$(echo "${node}" | cut -d: -f 2- | tr ":" ";")
   cat >> ${CONF} << __EOF__
 zone "${zone}.mesh" {
   type slave;
@@ -104,8 +106,8 @@ __EOF__
 
 for node in ${DNS_SUPERNODES}
 do
-  zone=$(echo $node | cut -d: -f 1)
-  ips=$(echo $node | cut -d: -f 2- | tr ":" "\n")
+  zone=$(echo "${node}" | cut -d: -f 1)
+  ips=$(echo "${node}" | cut -d: -f 2- | tr ":" "\n")
   count=0
   for ip in $ips
   do
@@ -118,7 +120,7 @@ __EOF__
   done
 done
 
-cat > /tmp/bind/zones/master-${DNS_ZONE}.zone.db << __EOF__
+cat > /tmp/bind/zones/master-"${DNS_ZONE}".zone.db << __EOF__
 \$TTL 60
 \$ORIGIN ${DNS_ZONE}.mesh.
 @   SOA  dns0.${DNS_ZONE}.mesh. root.${DNS_ZONE}.mesh. (
