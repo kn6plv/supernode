@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 trap "killall sleep olsrd named vtund; exit" TERM INT
 
@@ -34,10 +34,15 @@ if [ "${LOCALNODE}" = "" ]; then
   echo "LOCALNODE is not set so localnode.local.mesh will not resolve."
 fi
 
+# shellcheck source=/dev/null
 . /setup/network.sh
+# shellcheck source=/dev/null
 . /setup/vtun.sh
+# shellcheck source=/dev/null
 . /setup/olsr.sh
+# shellcheck source=/dev/null
 . /setup/named.sh
+# shellcheck source=/dev/null
 . /named/generate_local.sh
 
 sleep 2147483647d &
