@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Generate VTUN client
 
 mkdir /dev/net
@@ -28,20 +30,20 @@ do
     continue
   fi
 
-  name=$(echo ${vtun} | cut -d: -f 1)
-  password=$(echo ${vtun} | cut -d: -f 2)
-  net=$(echo ${vtun} | cut -d: -f 3)
-  target=$(echo ${vtun} | cut -d: -f 4)
+  name=$(echo "${vtun}" | cut -d: -f 1)
+  password=$(echo "${vtun}" | cut -d: -f 2)
+  net=$(echo "${vtun}" | cut -d: -f 3)
+  target=$(echo "${vtun}" | cut -d: -f 4)
 
   # Ignore incomplete entries
-  if [ "${name}" = "" -o "${password}" = "" -o "${net}" = "" ]; then
+  if [ "${name}" = "" ] || [ "${password}" = "" ] || [ "${net}" = "" ]; then
     continue
   fi
 
   # Generate local and remote IPs from network address
-  s=($(echo ${net} | tr "." "\n"))
-  localip="${s[0]}.${s[1]}.${s[2]}.$((1 + ${s[3]}))"
-  remoteip="${s[0]}.${s[1]}.${s[2]}.$((2 + ${s[3]}))"
+  mapfile -t s < <(echo "${net}" | tr "." "\n")
+  localip="${s[0]}.${s[1]}.${s[2]}.$((1 + s[3]))"
+  remoteip="${s[0]}.${s[1]}.${s[2]}.$((2 + s[3]))"
 
   if [ "${target}" = "" ]; then
     # Server config
