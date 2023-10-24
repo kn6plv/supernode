@@ -1,5 +1,6 @@
-#! /bin/bash
+#!/bin/bash
 
+# shellcheck source=/dev/null
 . /config
 
 ZONEFILE="/tmp/bind/zones/master-${DNS_ZONE}.zone.db"
@@ -7,7 +8,7 @@ ZONEFILE="/tmp/bind/zones/master-${DNS_ZONE}.zone.db"
 #
 # Create zone file header
 #
-cat > ${ZONEFILE} <<__EOF__
+cat > "${ZONEFILE}" <<__EOF__
 ;
 ; Zone ${DNS_ZONE}.mesh
 ;
@@ -27,17 +28,17 @@ __EOF__
 #
 # Create an entry for each valid IP/HOST line
 #
-cat /var/run/hosts_olsr | while read LINE
+while read -r LINE < /var/run/hosts_olsr
 do
-  words=( $LINE )
+  IFS=" " read -r -a words <<< "${LINE}"
   ip=${words[0]}
   host=${words[1]}
-  if [[ ${ip} =~ ^10\. && ! ${host} =~ \. ]]; then
-    echo "$host A	$ip" >> ${ZONEFILE}
+  if [[ "${ip}" =~ ^10\. ]] && [[ ! "${host}" =~ \. ]]; then
+    echo "${host} A	${ip}" >> "${ZONEFILE}"
   fi
 done
 
 #
 # Reload the zone
 #
-rndc reload ${DNS_ZONE}.mesh
+rndc reload "${DNS_ZONE}".mesh
