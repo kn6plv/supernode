@@ -1,5 +1,7 @@
 # AREDN Supernode
 
+***NOTE: This project is no longer maintained as the supernode behaviour has been incorporated into the AREDN codebase.***
+
 AREDN Supernodes provide a mechanism to connect multiple AREDN meshes together, allowing traffic to travel between them, without implicityly advertising all the nodes in every mesh to every other mesh. For a more complete description of why this is useful and how it works see https://docs.google.com/document/d/1Gqkv2wF6M7szCfbdVPbEG7IQzjDebQqdRx6mfLGMOqE/edit?usp=sharing
 
 ## Configuration
