@@ -21,7 +21,7 @@ COPY --from=build /usr/local/sbin/ /usr/local/sbin/
 COPY --from=build /etc/olsrd/ /etc/olsrd/
 RUN chmod 777 /startup.sh /setup/*.sh /named/*.sh && \
     apt update -y && \
-    apt install -y libgps-dev vtun bind9 iptables inotify-tools net-tools dnsutils procps && \
+    apt install -y libgps-dev vtun bind9 iptables inotify-tools net-tools dnsutils procps iputils-ping traceroute tcpdump && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 ENTRYPOINT ["/startup.sh"]
