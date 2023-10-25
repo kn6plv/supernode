@@ -1,0 +1,37 @@
+git:
+  commit: true
+  commitMessage: "chore(release): v${version}"
+  commitArgs: ""
+  tag: true
+  tagName: "v${version}"
+  tagAnnotation: "Automated release: v${version}"
+  push: true
+  requireBranch: release
+  requireCommits: true
+  changelog: "npx auto-changelog --stdout --commit-limit false"
+
+github:
+  release: true
+  releaseName: "Release v${version}"
+  assets: ["*.ipk", "*.deb"]
+
+npm:
+  publish: false
+
+hooks:
+  before:init: 
+    - git pull
+  after:bump:
+    - npx auto-changelog 
+
+plugins:
+  "@release-it/conventional-changelog":
+    infile: CHANGELOG.md
+    preset:
+      name: conventionalcommits
+      types:
+        - type: feat
+          section: Features
+        - type: fix
+          section: Bug Fixes
+

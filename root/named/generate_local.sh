@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 CONF=/tmp/bind/local.zone.db
 
@@ -19,7 +19,7 @@ local NS  ns0
 __EOF__
   for f in /tmp/bind/zones/master-*.zone.db /tmp/bind/zones/slave-*.zone.db
   do
-    cat ${f} | grep "10\." >> ${CONF}
+    grep "10\." < "${f}" >> "${CONF}"
   done
   if [ "${LOCALNODE}" != "" ]; then
     echo "localnode CNAME ${LOCALNODE}" >> ${CONF}
@@ -31,14 +31,16 @@ __EOF__
 }
 
 mkdir -p /tmp/update_local
-( inotifywait --quiet --monitor /tmp/bind/zones --event close_write | while read event
+# shellcheck disable=SC2034
+( inotifywait --quiet --monitor /tmp/bind/zones --event close_write | while read -r event
 do
   if [ ! -f /tmp/update_local/run ]
   then
     touch /tmp/update_local/run
   fi
 done ) &
-( inotifywait --quiet --monitor /tmp/update_local --event close_write | while read event
+# shellcheck disable=SC2034
+( inotifywait --quiet --monitor /tmp/update_local --event close_write | while read -r event
 do
   sleep 5
   rm -f /tmp/update_local/run

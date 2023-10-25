@@ -1,11 +1,12 @@
-#! /bin/bash
+#!/bin/bash
 
 trap "killall sleep olsrd named vtund; exit" TERM INT
 
 # Read the config from a file (if it exists) otherwise expect it
 # defined in the environment.
 if [ -f /config ]; then
- . /config
+  # shellcheck source=/dev/null
+  . /config
 else
   cat > /config << __EOF__
 PRIMARY_IP="${PRIMARY_IP}"
@@ -25,7 +26,7 @@ if [ "${NODE_NAME}" = "" ]; then
   echo "NODE_NAME is not defined; the name of this node in the mesh network."
   exit 1
 fi
-if [ "${MESH_NETS}" = "" -a "${SUPERNODE_NETS}" = "" ]; then
+if [ "${MESH_NETS}" = "" ] && [ "${SUPERNODE_NETS}" = "" ]; then
   echo "Neither MESH_NETS or SUPERNODE_NETS are defined. We cannot connect to a network."
   exit 1
 fi
@@ -33,10 +34,15 @@ if [ "${LOCALNODE}" = "" ]; then
   echo "LOCALNODE is not set so localnode.local.mesh will not resolve."
 fi
 
+# shellcheck source=/dev/null
 . /setup/network.sh
+# shellcheck source=/dev/null
 . /setup/vtun.sh
+# shellcheck source=/dev/null
 . /setup/olsr.sh
+# shellcheck source=/dev/null
 . /setup/named.sh
+# shellcheck source=/dev/null
 . /named/generate_local.sh
 
 sleep 2147483647d &

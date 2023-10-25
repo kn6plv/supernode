@@ -1,0 +1,17 @@
+name: Check script syntax
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  shell-test:
+    name: shellcheck
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        env:
+          SHELLCHECK_OPTS: -x
+        

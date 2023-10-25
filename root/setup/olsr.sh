@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Generate OLSR
 
 OLSRD_CONFIG="/etc/olsrd/olsrd.conf"
