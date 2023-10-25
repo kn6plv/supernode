@@ -1,0 +1,23 @@
+name: Release
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - release
+
+jobs:
+    release:
+      runs-on: ubuntu-20.04
+      steps:
+        - name: Checkout source code
+          uses: actions/checkout@v2
+        - name: Install the dependancies
+          run: npm install -g release-it @release-it/conventional-changelog @commitlint/config-conventional @commitlint/cli auto-changelog
+        - name: Initialize Git user
+          run: |
+              git config --global user.email "hickey@kinetic-compute.com"
+              git config --global user.name "Gerard Hickey"
+        - name: Generate release
+          run: npx release-it --ci
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
