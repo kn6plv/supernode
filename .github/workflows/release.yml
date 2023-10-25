@@ -21,3 +21,8 @@ jobs:
           run: npx release-it --ci
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Commit CHANGELOG back to master
+          run: |
+            git checkout master
+            git rebase release
+            git push
