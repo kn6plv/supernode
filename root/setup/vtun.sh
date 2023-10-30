@@ -22,7 +22,7 @@ __EOF__
 #
 # Loop through set of TUN0 to TUN31 variables, creating a tunnel for each valid one.
 #
-for tun in {0..${MAXTUNNEL}}
+for ((tun=0; tun<=MAXTUNNEL; tun++))
 do
   vtunr="TUN${tun}"
   vtun=${!vtunr}

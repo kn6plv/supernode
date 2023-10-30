@@ -47,7 +47,7 @@ fi
 
 # Startup any vtund clients
 MAXTUNNEL="${MAXTUNNEL:-31}"
-for tun in {0..${MAXTUNNEL}}
+for ((tun=0; tun<=MAXTUNNEL; tun++))
 do
   vtunr="TUN${tun}"
   vtun=${!vtunr}
