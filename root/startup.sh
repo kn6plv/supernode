@@ -37,13 +37,39 @@ fi
 # shellcheck source=/dev/null
 . /setup/network.sh
 # shellcheck source=/dev/null
-. /setup/vtun.sh
+. /setup/vtun.sh && vtund -s
 # shellcheck source=/dev/null
 . /setup/olsr.sh && olsrd
 # shellcheck source=/dev/null
 . /setup/named.sh && named
 # shellcheck source=/dev/null
 . /named/generate_local.sh
+
+# Startup any vtund clients
+MAXTUNNEL="${MAXTUNNEL:-31}"
+for tun in {0..${MAXTUNNEL}}
+do
+  vtunr="TUN${tun}"
+  vtun=${!vtunr}
+  if [ "${vtun}" = "" ]; then
+    continue
+  fi
+
+  name=$(echo "${vtun}" | cut -d: -f 1)
+  password=$(echo "${vtun}" | cut -d: -f 2)
+  net=$(echo "${vtun}" | cut -d: -f 3)
+  target=$(echo "${vtun}" | cut -d: -f 4)
+
+  # Ignore incomplete entries
+  if [ "${name}" = "" ] || [ "${password}" = "" ] || [ "${net}" = "" ]; then
+    continue
+  fi
+
+  # Generate local and remote IPs from network address
+  mapfile -t s < <(echo "${net}" | tr "." "\n")
+  vtund "${name}-${s[0]}-${s[1]}-${s[2]}-${s[3]}" "${target}"
+  tun=$((tun + 1))
+done
 
 sleep 2147483647d &
 wait "$!"

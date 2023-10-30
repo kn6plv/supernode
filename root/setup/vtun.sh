@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MAXTUNNEL=${MAXTUNNEL:-31}
+MAXTUNNEL="${MAXTUNNEL:-31}"
 
 # Generate VTUN client
 
@@ -22,8 +22,6 @@ __EOF__
 #
 # Loop through set of TUN0 to TUN31 variables, creating a tunnel for each valid one.
 #
-run=":"
-server=0
 for tun in {0..${MAXTUNNEL}}
 do
   vtunr="TUN${tun}"
@@ -49,40 +47,24 @@ do
 
   if [ "${target}" = "" ]; then
     # Server config
-    if [ "${server}" = "0" ]; then
-      server=1
-      run="${run};vtund -s"
-    fi
-    cat >> /etc/vtund.conf << __EOF__
-${name}-${s[0]}-${s[1]}-${s[2]}-${s[3]} {
-  device tun${tun};
-  passwd ${password};
-  up {
-    ifconfig "%% ${remoteip} netmask 255.255.255.252 pointopoint ${localip} mtu 1450";
-    route "add -net ${net}/30 gw ${localip}";
-  };
-}
-__EOF__
+    myip="${remoteip}"
+    farip="${localip}"
   else
     # Client config
-    cat >> /etc/vtund.conf << __EOF__
+    myip="${localip}"
+    farip="${remoteip}"
+  fi
+
+  cat >> /etc/vtund.conf << __EOF__
 ${name}-${s[0]}-${s[1]}-${s[2]}-${s[3]} {
   device tun${tun};
   passwd ${password};
   up {
-    ifconfig "%% ${localip} netmask 255.255.255.252 pointopoint ${remoteip} mtu 1450";
-    route "add -net ${net}/30 gw ${remoteip}";
+    ifconfig "%% ${myip} netmask 255.255.255.252 pointopoint ${farip} mtu 1450";
+    route "add -net ${net}/30 gw ${farip}";
   };
 }
 __EOF__
-    run="${run};vtund ${name}-${s[0]}-${s[1]}-${s[2]}-${s[3]} ${target}"
-  fi
+
   tun=$((tun + 1))
 done
-
-# Start any vtun daemons
-if [ "${run}" = ":" ]; then
-  echo "No tunnels defined"
-else
-  bash -c "${run}"
-fi
