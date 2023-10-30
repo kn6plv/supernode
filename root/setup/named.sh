@@ -137,5 +137,3 @@ __EOF__
 
 # Fix rndc.key
 chmod 644 /etc/bind/rndc.key
-
-named

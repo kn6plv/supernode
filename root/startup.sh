@@ -39,9 +39,9 @@ fi
 # shellcheck source=/dev/null
 . /setup/vtun.sh
 # shellcheck source=/dev/null
-. /setup/olsr.sh
+. /setup/olsr.sh && olsrd
 # shellcheck source=/dev/null
-. /setup/named.sh
+. /setup/named.sh && named
 # shellcheck source=/dev/null
 . /named/generate_local.sh
 

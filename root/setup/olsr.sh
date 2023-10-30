@@ -110,5 +110,3 @@ done
 ip rule add pref 30220 lookup 30
 ip rule add pref 30230 lookup main
 ip rule add pref 30240 lookup 31
-
-olsrd
