@@ -1,5 +1,7 @@
 #!/bin/bash
 
+MAXTUNNEL=${MAXTUNNEL:-31}
+
 # Generate VTUN client
 
 mkdir /dev/net
@@ -22,7 +24,7 @@ __EOF__
 #
 run=":"
 server=0
-for tun in {0..31}
+for tun in {0..${MAXTUNNEL}}
 do
   vtunr="TUN${tun}"
   vtun=${!vtunr}
